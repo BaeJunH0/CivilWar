@@ -13,27 +13,34 @@ public class Team {
     private Long id;
     @Column(name = "name", unique = true)
     private String name;
-    @ManyToOne
-    private User user;
     @ManyToMany(mappedBy = "teams")
     private Set<Player> players = new HashSet<>();
+    @ManyToMany(mappedBy = "users")
+    private Set<User> users = new HashSet<>();
 
     protected Team(){}
 
-    public Team(String name, User user) {
+    public Team(String name) {
         this.name = name;
-        this.user = user;
     }
 
     public String getName() {
         return name;
     }
 
-    public User getUser() {
-        return user;
+    public Set<User> getUsers() {
+        return users;
+    }
+
+    public Set<Player> getPlayers() {
+        return players;
     }
 
     public void addPlayer(Player player){
         players.add(player);
+    }
+
+    public void joinUser(User user){
+        users.add(user);
     }
 }

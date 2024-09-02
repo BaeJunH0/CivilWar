@@ -2,6 +2,9 @@ package toyProject.demo.domain;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Table(name="User")
 @Entity
 public class User {
@@ -14,6 +17,20 @@ public class User {
     private String password;
     @Column(name="nickname")
     private String nickname;
+    @ManyToMany
+    @JoinTable(
+            name = "user_player",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "player_id")
+    )
+    private Set<Player> players = new HashSet<>();
+    @ManyToMany
+    @JoinTable(
+            name = "user_team",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "team_id")
+    )
+    private Set<Team> teams = new HashSet<>();
 
     protected User(){}
 
@@ -33,5 +50,21 @@ public class User {
 
     public String getNickname() {
         return nickname;
+    }
+
+    public Set<Player> getPlayers() {
+        return players;
+    }
+
+    public Set<Team> getTeams() {
+        return teams;
+    }
+
+    public void addPlayer(Player player){
+        players.add(player);
+    }
+
+    public void addTeam(Team team){
+        teams.add(team);
     }
 }

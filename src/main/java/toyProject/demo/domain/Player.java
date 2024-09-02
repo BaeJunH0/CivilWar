@@ -19,8 +19,8 @@ public class Player {
     private String freeTier;
     @Column(name="soloTier")
     private String soloTier;
-    @ManyToOne
-    private User user;
+    @ManyToMany(mappedBy = "users")
+    private Set<User> users = new HashSet<>();
     @ManyToMany
     @JoinTable(
             name = "player_team",
@@ -31,12 +31,11 @@ public class Player {
 
     protected Player(){}
 
-    public Player(int level, String nickname, String freeTier, String soloTier, User user) {
+    public Player(int level, String nickname, String freeTier, String soloTier) {
         this.level = level;
         this.nickname = nickname;
         this.freeTier = freeTier;
         this.soloTier = soloTier;
-        this.user = user;
     }
 
     public int getLevel() {
@@ -55,11 +54,19 @@ public class Player {
         return soloTier;
     }
 
-    public User getUser(){
-        return user;
+    public Set<User> getUsers() {
+        return users;
+    }
+
+    public Set<Team> getTeams() {
+        return teams;
     }
 
     public void joinTeam(Team team){
         teams.add(team);
+    }
+
+    public void joinUser(User user){
+        users.add(user);
     }
 }
