@@ -32,13 +32,13 @@ public class TeamController {
     }
 
     @PostMapping("/api/teams")
-    public ResponseEntity<Void> createTeam(TeamRequest teamRequest){
+    public ResponseEntity<Void> createTeam(@RequestBody TeamRequest teamRequest){
         teamService.save(teamRequest);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping("/api/teams/{id}")
-    public ResponseEntity<Void> updateTeam(@PathVariable Long id, TeamRequest teamRequest){
+    public ResponseEntity<Void> updateTeam(@PathVariable Long id, @RequestBody TeamRequest teamRequest){
         teamService.update(id, teamRequest);
         return new ResponseEntity<>(HttpStatus.OK);
     }
