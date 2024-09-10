@@ -1,6 +1,7 @@
 package toyProject.demo.domain;
 
 import jakarta.persistence.*;
+import toyProject.demo.DTO.team.TeamRequest;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -42,5 +43,9 @@ public class Team {
 
     public void joinUser(User user){
         users.add(user);
+    }
+
+    public void changeName(String name){
+        this.name = name;
     }
 }
