@@ -17,5 +17,5 @@ public interface PlayerRepository extends JpaRepository<Player, Long> {
     <S extends Player> S save(S entity);
 
     @Override
-    void deleteById(Long aLong);
+    void deleteById(Long id);
 }
