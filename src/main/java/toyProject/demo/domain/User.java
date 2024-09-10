@@ -1,6 +1,7 @@
 package toyProject.demo.domain;
 
 import jakarta.persistence.*;
+import toyProject.demo.DTO.user.UserRequest;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -17,6 +18,9 @@ public class User {
     private String password;
     @Column(name="nickname")
     private String nickname;
+    @Column(name="admin")
+    private boolean admin;
+
     @ManyToMany
     @JoinTable(
             name = "user_player",
@@ -38,6 +42,7 @@ public class User {
         this.email = email;
         this.password = password;
         this.nickname = nickname;
+        this.admin = false;
     }
 
     public String getEmail() {
@@ -60,11 +65,19 @@ public class User {
         return teams;
     }
 
+    public boolean getAdmin(){
+        return admin;
+    }
+
     public void addPlayer(Player player){
         players.add(player);
     }
 
     public void addTeam(Team team){
         teams.add(team);
+    }
+
+    public void changeName(String nickname){
+        this.nickname = nickname;
     }
 }
