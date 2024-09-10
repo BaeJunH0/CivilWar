@@ -1,6 +1,7 @@
 package toyProject.demo.domain;
 
 import jakarta.persistence.*;
+import toyProject.demo.DTO.player.PlayerRequest;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -68,5 +69,12 @@ public class Player {
 
     public void joinUser(User user){
         users.add(user);
+    }
+
+    public void update(PlayerRequest playerRequest){
+        this.level = playerRequest.getLevel();
+        this.freeTier = playerRequest.getFreeTier();
+        this.soloTier = playerRequest.getSoloTier();
+        this.nickname = playerRequest.getNickname();
     }
 }
