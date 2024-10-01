@@ -1,13 +1,11 @@
-package toyProject.demo.controller;
+package toyProject.demo.team.presentation;
 
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import toyProject.demo.DTO.team.TeamRequest;
-import toyProject.demo.DTO.team.TeamResponse;
-import toyProject.demo.domain.Team;
-import toyProject.demo.service.TeamService;
+import toyProject.demo.team.presentation.dto.TeamRequest;
+import toyProject.demo.team.presentation.dto.TeamResponse;
+import toyProject.demo.team.application.TeamService;
 
 import java.util.List;
 

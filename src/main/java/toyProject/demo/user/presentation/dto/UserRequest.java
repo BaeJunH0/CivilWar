@@ -1,4 +1,4 @@
-package toyProject.demo.DTO.user;
+package toyProject.demo.user.presentation.dto;
 
 public class UserRequest {
     private String email;

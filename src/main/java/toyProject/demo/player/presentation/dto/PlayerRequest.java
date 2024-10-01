@@ -1,4 +1,4 @@
-package toyProject.demo.DTO.player;
+package toyProject.demo.player.presentation.dto;
 
 public class PlayerRequest {
     private int level;

@@ -1,11 +1,11 @@
-package toyProject.demo.service;
+package toyProject.demo.player.application;
 
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
-import toyProject.demo.DTO.player.PlayerRequest;
-import toyProject.demo.DTO.player.PlayerResponse;
-import toyProject.demo.domain.Player;
-import toyProject.demo.repository.PlayerRepository;
+import toyProject.demo.player.presentation.dto.PlayerRequest;
+import toyProject.demo.player.presentation.dto.PlayerResponse;
+import toyProject.demo.player.domain.Player;
+import toyProject.demo.player.persistence.PlayerRepository;
 
 import java.util.ArrayList;
 import java.util.List;

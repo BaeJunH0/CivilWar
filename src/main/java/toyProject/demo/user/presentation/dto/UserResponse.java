@@ -1,6 +1,6 @@
-package toyProject.demo.DTO.user;
+package toyProject.demo.user.presentation.dto;
 
-import toyProject.demo.domain.User;
+import toyProject.demo.user.domain.User;
 
 public class UserResponse {
     private String email;

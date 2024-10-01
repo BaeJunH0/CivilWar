@@ -1,7 +1,7 @@
-package toyProject.demo.DTO.team;
+package toyProject.demo.team.presentation.dto;
 
-import toyProject.demo.domain.Player;
-import toyProject.demo.domain.Team;
+import toyProject.demo.player.domain.Player;
+import toyProject.demo.team.domain.Team;
 
 import java.util.Set;
 

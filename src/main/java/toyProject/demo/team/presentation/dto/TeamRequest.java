@@ -1,4 +1,4 @@
-package toyProject.demo.DTO.team;
+package toyProject.demo.team.presentation.dto;
 
 import java.util.Set;
 

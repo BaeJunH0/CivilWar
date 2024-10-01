@@ -1,7 +1,9 @@
-package toyProject.demo.domain;
+package toyProject.demo.player.domain;
 
 import jakarta.persistence.*;
-import toyProject.demo.DTO.player.PlayerRequest;
+import toyProject.demo.team.domain.Team;
+import toyProject.demo.user.domain.User;
+import toyProject.demo.player.presentation.dto.PlayerRequest;
 
 import java.util.HashSet;
 import java.util.Set;

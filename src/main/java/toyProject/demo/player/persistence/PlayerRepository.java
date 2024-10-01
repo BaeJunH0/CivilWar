@@ -1,7 +1,7 @@
-package toyProject.demo.repository;
+package toyProject.demo.player.persistence;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import toyProject.demo.domain.Player;
+import toyProject.demo.player.domain.Player;
 
 import java.util.List;
 import java.util.Optional;

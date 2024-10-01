@@ -1,11 +1,11 @@
-package toyProject.demo.controller;
+package toyProject.demo.user.presentation;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import toyProject.demo.DTO.user.UserRequest;
-import toyProject.demo.DTO.user.UserResponse;
-import toyProject.demo.service.UserService;
+import toyProject.demo.user.presentation.dto.UserRequest;
+import toyProject.demo.user.presentation.dto.UserResponse;
+import toyProject.demo.user.application.UserService;
 
 import java.util.List;
 

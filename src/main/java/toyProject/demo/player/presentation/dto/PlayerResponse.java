@@ -1,8 +1,6 @@
-package toyProject.demo.DTO.player;
+package toyProject.demo.player.presentation.dto;
 
-import toyProject.demo.domain.Player;
-import toyProject.demo.domain.Team;
-import toyProject.demo.domain.User;
+import toyProject.demo.player.domain.Player;
 
 public class PlayerResponse {
     private int level;

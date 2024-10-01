@@ -1,7 +1,7 @@
-package toyProject.demo.repository;
+package toyProject.demo.user.persistence;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import toyProject.demo.domain.User;
+import toyProject.demo.user.domain.User;
 
 import java.util.List;
 import java.util.Optional;
