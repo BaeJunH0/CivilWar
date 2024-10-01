@@ -7,7 +7,7 @@ import toyProject.demo.team.domain.Team;
 import java.util.HashSet;
 import java.util.Set;
 
-@Table(name="User")
+@Table(name="users")
 @Entity
 public class User {
     @Id

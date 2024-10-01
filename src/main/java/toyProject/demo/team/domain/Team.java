@@ -7,7 +7,7 @@ import toyProject.demo.player.domain.Player;
 import java.util.HashSet;
 import java.util.Set;
 
-@Table(name="Team")
+@Table(name="teams")
 @Entity
 public class Team {
     @Id
@@ -17,7 +17,7 @@ public class Team {
     private String name;
     @ManyToMany(mappedBy = "teams")
     private Set<Player> players = new HashSet<>();
-    @ManyToMany(mappedBy = "users")
+    @ManyToMany(mappedBy = "teams")
     private Set<User> users = new HashSet<>();
 
     protected Team(){}

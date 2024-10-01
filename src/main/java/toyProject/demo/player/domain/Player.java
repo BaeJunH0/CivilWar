@@ -8,7 +8,7 @@ import toyProject.demo.player.presentation.dto.PlayerRequest;
 import java.util.HashSet;
 import java.util.Set;
 
-@Table(name="Player")
+@Table(name="players")
 @Entity
 public class Player {
     @Id
@@ -22,7 +22,7 @@ public class Player {
     private String freeTier;
     @Column(name="soloTier")
     private String soloTier;
-    @ManyToMany(mappedBy = "users")
+    @ManyToMany(mappedBy = "players")
     private Set<User> users = new HashSet<>();
     @ManyToMany
     @JoinTable(
