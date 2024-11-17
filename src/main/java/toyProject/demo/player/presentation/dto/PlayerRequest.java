@@ -12,13 +12,6 @@ public class PlayerRequest {
     private String freeTier;
     private String soloTier;
 
-    private PlayerRequest(int level, String nickname, String freeTier, String soloTier) {
-        this.level = level;
-        this.nickname = nickname;
-        this.freeTier = freeTier;
-        this.soloTier = soloTier;
-    }
-
     public static Player toEntityFrom(PlayerRequest playerRequest){
         return Player.of(
                 playerRequest.getLevel(),
