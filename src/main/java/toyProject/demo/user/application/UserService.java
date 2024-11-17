@@ -1,13 +1,12 @@
 package toyProject.demo.user.application;
 
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import toyProject.demo.user.presentation.dto.UserRequest;
 import toyProject.demo.user.presentation.dto.UserResponse;
 import toyProject.demo.user.domain.User;
 import toyProject.demo.user.persistence.UserRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -18,32 +17,25 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
+    @Transactional(readOnly = true)
     public List<UserResponse> findAll(){
-        List<UserResponse> answer = new ArrayList<>();
-        List<User> users = userRepository.findAll();
-        for (User user : users) {
-            answer.add(new UserResponse(user));
-        }
-        return answer;
+        return userRepository.findAll().stream().map(UserResponse::from).toList();
     }
 
-    public UserResponse findOne(Long id){
-        User user = userRepository.findById(id).orElseThrow(NoSuchFieldError::new);
-        return new UserResponse(user);
+    @Transactional(readOnly = true)
+    public UserResponse findOneUser(Long id){
+        return UserResponse.from(userRepository.findById(id).orElseThrow(NoSuchFieldError::new));
     }
 
     @Transactional
     public void save(UserRequest userRequest){
-        userRepository.save(new User(
-                userRequest.getEmail(), userRequest.getPassword(), userRequest.getNickname()
-        ));
+        userRepository.save(UserRequest.toEntityFrom(userRequest));
     }
 
     @Transactional
     public void update(Long id, UserRequest userRequest){
         User user = userRepository.findById(id).orElseThrow(NoSuchFieldError::new);
         user.changeName(userRequest.getNickname());
-        // 추가 예정
     }
 
     @Transactional

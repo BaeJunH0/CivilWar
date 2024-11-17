@@ -1,34 +1,19 @@
 package toyProject.demo.player.presentation.dto;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import toyProject.demo.player.domain.Player;
+
+@Getter
+@NoArgsConstructor
 public class PlayerRequest {
-    private int level;
-    private String nickname;
-    private String freeTier;
-    private String soloTier;
+    private String riotId;
+    private String riotTag;
 
-    public PlayerRequest() {}
-
-    public PlayerRequest(int level, String nickname, String freeTier, String soloTier) {
-        this.level = level;
-        this.nickname = nickname;
-        this.freeTier = freeTier;
-        this.soloTier = soloTier;
+    public static Player toEntityFrom(PlayerRequest playerRequest){
+        return Player.of(
+                playerRequest.getRiotId(),
+                playerRequest.getRiotTag()
+        );
     }
-
-    public int getLevel() {
-        return level;
-    }
-
-    public String getNickname() {
-        return nickname;
-    }
-
-    public String getFreeTier() {
-        return freeTier;
-    }
-
-    public String getSoloTier() {
-        return soloTier;
-    }
-
 }
