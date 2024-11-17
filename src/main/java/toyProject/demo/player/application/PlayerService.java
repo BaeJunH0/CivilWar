@@ -1,13 +1,12 @@
 package toyProject.demo.player.application;
 
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import toyProject.demo.player.presentation.dto.PlayerRequest;
 import toyProject.demo.player.presentation.dto.PlayerResponse;
 import toyProject.demo.player.domain.Player;
 import toyProject.demo.player.persistence.PlayerRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -18,35 +17,33 @@ public class PlayerService {
         this.playerRepository = playerRepository;
     }
 
+    @Transactional(readOnly = true)
     public List<PlayerResponse> findAll(){
-        List<PlayerResponse> answer = new ArrayList<>();
-        List<Player> players = playerRepository.findAll();
-        for (Player player : players) {
-            answer.add(new PlayerResponse(player));
-        }
-        return answer;
+        return playerRepository.findAll().stream().map(PlayerResponse::from).toList();
     }
 
+    @Transactional(readOnly = true)
     public PlayerResponse findById(Long id){
-        return new PlayerResponse(
-                playerRepository.findById(id).orElseThrow(NoSuchFieldError::new)
-        );
+        return PlayerResponse.from(playerRepository.findById(id).orElseThrow(NoSuchFieldError::new));
     }
+
     @Transactional
     public void save(PlayerRequest playerRequest){
-        Player player = new Player(
+        playerRepository.save(Player.of(
                 playerRequest.getLevel(),
                 playerRequest.getNickname(),
                 playerRequest.getFreeTier(),
                 playerRequest.getSoloTier()
+            )
         );
-        playerRepository.save(player);
     }
+
     @Transactional
     public void update(Long id, PlayerRequest playerRequest){
         Player player = playerRepository.findById(id).orElseThrow(NoSuchFieldError::new);
         player.update(playerRequest);
     }
+
     @Transactional
     public void delete(Long id){
         playerRepository.deleteById(id);
