@@ -10,6 +10,7 @@ import toyProject.demo.user.application.UserService;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api/users")
 public class UserController {
     private final UserService userService;
 
@@ -17,31 +18,31 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/api/users")
+    @GetMapping
     public ResponseEntity<List<UserResponse>> readUsers(){
         List<UserResponse> users = userService.findAll();
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    @GetMapping("/api/users/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<UserResponse> readUser(@PathVariable Long id){
-        UserResponse user = userService.findOne(id);
+        UserResponse user = userService.findOneUser(id);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    @PostMapping("/api/users")
+    @PostMapping
     public ResponseEntity<Void> createUser(@RequestBody UserRequest userRequest){
         userService.save(userRequest);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PutMapping("/api/users/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Void> updateUser(@PathVariable Long id, @RequestBody UserRequest userRequest){
         userService.update(id, userRequest);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping("/api/users/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id){
         userService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

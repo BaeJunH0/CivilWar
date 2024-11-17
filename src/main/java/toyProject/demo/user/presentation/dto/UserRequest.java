@@ -1,28 +1,20 @@
 package toyProject.demo.user.presentation.dto;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import toyProject.demo.user.domain.User;
+
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class UserRequest {
     private String email;
     private String nickname;
     private String password;
 
-    public UserRequest() {
-    }
-
-    public UserRequest(String email, String nickname, String password) {
-        this.email = email;
-        this.nickname = nickname;
-        this.password = password;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getNickname() {
-        return nickname;
-    }
-
-    public String getPassword() {
-        return password;
+    public static User toEntityFrom(UserRequest userRequest){
+        return User.of(userRequest.getEmail(), userRequest.getPassword(), userRequest.getNickname());
     }
 }
