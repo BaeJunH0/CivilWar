@@ -29,19 +29,13 @@ public class PlayerService {
 
     @Transactional
     public void save(PlayerRequest playerRequest){
-        playerRepository.save(Player.of(
-                playerRequest.getLevel(),
-                playerRequest.getNickname(),
-                playerRequest.getFreeTier(),
-                playerRequest.getSoloTier()
-            )
-        );
+        playerRepository.save(PlayerRequest.toEntityFrom(playerRequest));
     }
 
     @Transactional
     public void update(Long id, PlayerRequest playerRequest){
-        Player player = playerRepository.findById(id).orElseThrow(NoSuchFieldError::new);
-        player.update(playerRequest);
+        playerRepository.findById(id).orElseThrow(NoSuchFieldError::new)
+                .update(playerRequest);
     }
 
     @Transactional
