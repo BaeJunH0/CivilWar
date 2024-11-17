@@ -14,30 +14,17 @@ public class Player {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "level", nullable = false)
-    private int level;
-    @Column(name = "nickname", nullable = false)
-    private String nickname;
-    @Column(name = "freeTier")
-    private String freeTier;
-    @Column(name = "soloTier")
-    private String soloTier;
+    @Column(nullable = false)
+    private String riotId;
+    @Column(nullable = false)
+    private String riotTag;
 
-    private Player(int level, String nickname, String freeTier, String soloTier){
-        this.level = level;
-        this.nickname = nickname;
-        this.freeTier = freeTier;
-        this.soloTier = soloTier;
+    private Player(String riotId, String riotTag){
+        this.riotId = riotId;
+        this.riotTag = riotTag;
     }
 
-    public static Player of(int level, String nickname, String freeTier, String soloTier){
-        return new Player(level, nickname, freeTier, soloTier);
-    }
-
-    public void update(PlayerRequest playerRequest) {
-        this.level = playerRequest.getLevel();
-        this.freeTier = playerRequest.getFreeTier();
-        this.soloTier = playerRequest.getSoloTier();
-        this.nickname = playerRequest.getNickname();
+    public static Player of(String riotId, String riotTag){
+        return new Player(riotId, riotTag);
     }
 }

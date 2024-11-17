@@ -21,7 +21,7 @@ public class PlayerResponse {
 
     public static PlayerResponse from(Player player){
         return new PlayerResponse(
-                player.getLevel(), player.getNickname(), player.getFreeTier(), player.getSoloTier()
+
         );
     }
 }

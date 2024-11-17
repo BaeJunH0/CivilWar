@@ -33,12 +33,6 @@ public class PlayerService {
     }
 
     @Transactional
-    public void update(Long id, PlayerRequest playerRequest){
-        playerRepository.findById(id).orElseThrow(NoSuchFieldError::new)
-                .update(playerRequest);
-    }
-
-    @Transactional
     public void delete(Long id){
         playerRepository.deleteById(id);
     }

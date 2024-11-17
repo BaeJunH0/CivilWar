@@ -7,17 +7,13 @@ import toyProject.demo.player.domain.Player;
 @Getter
 @NoArgsConstructor
 public class PlayerRequest {
-    private int level;
-    private String nickname;
-    private String freeTier;
-    private String soloTier;
+    private String riotId;
+    private String riotTag;
 
     public static Player toEntityFrom(PlayerRequest playerRequest){
         return Player.of(
-                playerRequest.getLevel(),
-                playerRequest.getNickname(),
-                playerRequest.getFreeTier(),
-                playerRequest.getSoloTier()
+                playerRequest.getRiotId(),
+                playerRequest.getRiotTag()
         );
     }
 }
