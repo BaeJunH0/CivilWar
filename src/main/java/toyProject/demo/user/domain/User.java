@@ -13,11 +13,11 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "email")
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
     @Column(name = "password")
     private String password;
-    @Column(name = "nickname")
+    @Column(name = "nickname", nullable = false, unique = true)
     private String nickname;
     @Column(name = "admin")
     private boolean admin;
@@ -26,13 +26,14 @@ public class User {
         this.email = email;
         this.password = password;
         this.nickname = nickname;
-    }
-
-    public void changeName(String nickname) {
-        this.nickname = nickname;
+        this.admin = false;
     }
 
     public static User of(String email, String password, String nickname){
         return new User(email, password, nickname);
+    }
+
+    public void changeName(String nickname) {
+        this.nickname = nickname;
     }
 }

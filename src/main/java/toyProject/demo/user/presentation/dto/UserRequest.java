@@ -13,8 +13,4 @@ public class UserRequest {
     private String email;
     private String nickname;
     private String password;
-
-    public static User toEntityFrom(UserRequest userRequest){
-        return User.of(userRequest.getEmail(), userRequest.getPassword(), userRequest.getNickname());
-    }
 }

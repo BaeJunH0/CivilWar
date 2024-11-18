@@ -2,6 +2,8 @@ package toyProject.demo.user.application;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import toyProject.demo.user.application.dto.UserCommand;
+import toyProject.demo.user.application.dto.UserInfo;
 import toyProject.demo.user.presentation.dto.UserRequest;
 import toyProject.demo.user.presentation.dto.UserResponse;
 import toyProject.demo.user.domain.User;
@@ -28,8 +30,8 @@ public class UserService {
     }
 
     @Transactional
-    public void save(UserRequest userRequest){
-        userRepository.save(UserRequest.toEntityFrom(userRequest));
+    public void save(UserCommand userCommand){
+        userRepository.save(UserCommand.toEntityFrom(userCommand));
     }
 
     @Transactional
@@ -41,5 +43,28 @@ public class UserService {
     @Transactional
     public void delete(Long id){
         userRepository.deleteById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public boolean isExistedUser(String email){
+        return userRepository.existsByEmail(email);
+    }
+
+    @Transactional(readOnly = true)
+    public UserInfo loginUser(String email){
+        return UserInfo.from(userRepository.findUserByEmail(email).orElseThrow(NoSuchFieldError::new));
+    }
+
+    @Transactional(readOnly = true)
+    public boolean isLogin(UserCommand userCommand){
+        UserInfo userInfo = loginUser(userCommand.getEmail());
+        if(!userInfo.getNickname().equals(userCommand.getNickname())) {
+            return false;
+        }
+        if(!userInfo.getPassword().equals(userCommand.getPassword())) {
+            return false;
+        }
+
+        return true;
     }
 }

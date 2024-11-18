@@ -4,6 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import toyProject.demo.auth.AuthenticateMember;
+import toyProject.demo.auth.JwtTokenProvider;
+import toyProject.demo.auth.Token;
+import toyProject.demo.user.application.dto.UserCommand;
+import toyProject.demo.user.application.dto.UserInfo;
+import toyProject.demo.user.domain.User;
 import toyProject.demo.user.presentation.dto.UserRequest;
 import toyProject.demo.user.presentation.dto.UserResponse;
 import toyProject.demo.user.application.UserService;
@@ -16,6 +22,24 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
 
+    // 토큰 x
+    @PostMapping("/register")
+    public ResponseEntity<Token> register(@RequestBody UserRequest userRequest){
+        userService.save(UserCommand.from(userRequest));
+        Token token = Token.from(JwtTokenProvider.makeToken(userRequest));
+        return new ResponseEntity<>(token, HttpStatus.CREATED);
+    }
+
+    // 토큰 o
+    @PostMapping("/login")
+    public ResponseEntity<Token> login(@RequestBody UserRequest userRequest){
+        if(!userService.isLogin(UserCommand.from(userRequest))){
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        Token token = Token.from(JwtTokenProvider.makeToken(userRequest));
+        return new ResponseEntity<>(token, HttpStatus.OK);
+    }
+
     @GetMapping
     public ResponseEntity<List<UserResponse>> readUsers(){
         List<UserResponse> users = userService.findAll();
@@ -26,12 +50,6 @@ public class UserController {
     public ResponseEntity<UserResponse> readUser(@PathVariable Long id){
         UserResponse user = userService.findOneUser(id);
         return new ResponseEntity<>(user, HttpStatus.OK);
-    }
-
-    @PostMapping
-    public ResponseEntity<Void> createUser(@RequestBody UserRequest userRequest){
-        userService.save(userRequest);
-        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
