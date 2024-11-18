@@ -18,11 +18,4 @@ public class TeamResponse {
         this.name = name;
         this.players = players;
     }
-
-    public static TeamResponse from(Team team){
-        return new TeamResponse(
-                team.getName(),
-                team.getPlayers().stream().map(PlayerResponse::from).collect(Collectors.toSet())
-        );
-    }
 }
