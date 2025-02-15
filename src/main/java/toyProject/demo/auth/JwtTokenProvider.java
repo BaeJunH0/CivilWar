@@ -6,24 +6,26 @@ import io.jsonwebtoken.security.Keys;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import toyProject.demo.user.presentation.dto.UserRequest;
 
 import java.util.Date;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class JwtTokenProvider {
-    @Value("${key}")
-    private static String secretKey;
+@Component
+public class JwtTokenProvider {
+    @Value("${KEY}")
+    private String secretKey;
 
-    @Value("${token-expire-length}")
-    private static long validTime;
+    @Value("${TOKEN_EXPIRE_LENGTH}")
+    private long validTime;
 
-    public static String makeToken(UserRequest user) {
+    public String makeToken(UserRequest user) {
         long nowMillis = System.currentTimeMillis();
         Date now = new Date(System.currentTimeMillis());
 
         return Jwts.builder()
-                .claim("email", user.getEmail())
+                .claim("email", user.email())
+                .claim("nickname", user.nickname())
                 .issuedAt(now)
                 .expiration(new Date(nowMillis + validTime))
                 .signWith(Keys.hmacShaKeyFor(secretKey.getBytes()))
@@ -33,7 +35,7 @@ public final class JwtTokenProvider {
     /*
      * 토큰에서 클레임 ( email ) 추출
      */
-    public static String getClaimsFromToken(String token) {
+    public String getEmailsFromToken(String token) {
         try {
             Claims claims = Jwts.parser()
                     .verifyWith(Keys.hmacShaKeyFor(secretKey.getBytes()))

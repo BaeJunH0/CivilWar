@@ -14,6 +14,7 @@ import toyProject.demo.user.application.dto.UserInfo;
 @RequiredArgsConstructor
 public class MemberArgumentResolver implements HandlerMethodArgumentResolver {
     private final UserService userService;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
@@ -34,7 +35,7 @@ public class MemberArgumentResolver implements HandlerMethodArgumentResolver {
 
         token = token.substring(7); // "Bearer " 부분을 제거
 
-        String email = JwtTokenProvider.getClaimsFromToken(token);
+        String email = jwtTokenProvider.getEmailsFromToken(token);
         if(!userService.isExistedUser(email)) {
             throw new IllegalArgumentException("유효하지 않은 로그인 정보입니다!");
         }

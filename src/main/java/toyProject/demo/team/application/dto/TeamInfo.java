@@ -1,4 +1,9 @@
 package toyProject.demo.team.application.dto;
 
-public class TeamInfo {
+import toyProject.demo.team.domain.Team;
+
+public record TeamInfo(String name) {
+    public static TeamInfo from(Team){
+
+    }
 }

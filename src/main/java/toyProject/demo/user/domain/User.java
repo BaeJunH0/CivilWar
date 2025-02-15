@@ -5,7 +5,9 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Table(name = "users")
+import java.util.UUID;
+
+@Table(name = "user")
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -15,16 +17,16 @@ public class User {
     private Long id;
     @Column(name = "email", nullable = false, unique = true)
     private String email;
-    @Column(name = "password")
-    private String password;
     @Column(name = "nickname", nullable = false, unique = true)
     private String nickname;
+    @Column(name = "password")
+    private UUID password;
     @Column(name = "admin")
     private boolean admin;
 
     private User(String email, String password, String nickname){
         this.email = email;
-        this.password = password;
+        this.password = UUID.fromString(password);
         this.nickname = nickname;
         this.admin = false;
     }
@@ -33,6 +35,12 @@ public class User {
         return new User(email, password, nickname);
     }
 
+    public boolean passCheck(User user){
+        if(user.getPassword().equals(this.password)){
+            return true;
+        }
+        return false;
+    }
     public void changeName(String nickname) {
         this.nickname = nickname;
     }

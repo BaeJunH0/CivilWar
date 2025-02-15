@@ -1,27 +1,9 @@
 package toyProject.demo.player.presentation.dto;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import toyProject.demo.player.domain.Player;
+import toyProject.demo.player.application.dto.PlayerInfo;
 
-@Getter
-@NoArgsConstructor
-public class PlayerResponse {
-    private int level;
-    private String nickname;
-    private String freeTier;
-    private String soloTier;
-
-    private PlayerResponse(int level, String nickname, String freeTier, String soloTier) {
-        this.level = level;
-        this.nickname = nickname;
-        this.freeTier = freeTier;
-        this.soloTier = soloTier;
-    }
-
-    public static PlayerResponse from(Player player){
-        return new PlayerResponse(
-
-        );
+public record PlayerResponse(String riotId, String riotTag) {
+    public static PlayerResponse from(PlayerInfo playerInfo){
+        return new PlayerResponse(playerInfo.riotId(), playerInfo.riotTag());
     }
 }
