@@ -7,13 +7,16 @@ import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
-import toyProject.demo.user.application.UserService;
-import toyProject.demo.user.application.dto.UserInfo;
+import toyProject.demo.exception.CustomException;
+import toyProject.demo.exception.errorCode.AuthErrorCode;
+import toyProject.demo.member.application.dto.MemberInfo;
+import toyProject.demo.member.domain.Member;
+import toyProject.demo.member.persistence.MemberRepository;
 
 @Component
 @RequiredArgsConstructor
 public class MemberArgumentResolver implements HandlerMethodArgumentResolver {
-    private final UserService userService;
+    private final MemberRepository memberRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
     @Override
@@ -22,7 +25,7 @@ public class MemberArgumentResolver implements HandlerMethodArgumentResolver {
     }
 
     @Override
-    public UserInfo resolveArgument(
+    public MemberInfo resolveArgument(
             MethodParameter parameter,
             ModelAndViewContainer mavContainer,
             NativeWebRequest webRequest,
@@ -33,13 +36,17 @@ public class MemberArgumentResolver implements HandlerMethodArgumentResolver {
             throw new IllegalArgumentException("인증 방식이 잘못되었거나, 토큰이 없습니다!");
         }
 
-        token = token.substring(7); // "Bearer " 부분을 제거
-
-        String email = jwtTokenProvider.getEmailsFromToken(token);
-        if(!userService.isExistedUser(email)) {
-            throw new IllegalArgumentException("유효하지 않은 로그인 정보입니다!");
+        token = token.substring(7);
+        // 유효시간 검증
+        if(jwtTokenProvider.isTokenExpired(token)) {
+            throw CustomException.of(AuthErrorCode.TOKEN_EXPIRED);
         }
+        // 클레임 검증 ( Email )
+        String email = jwtTokenProvider.getEmailsFromToken(token);
+        Member member = memberRepository.findUserByEmail(email).orElseThrow(
+                () -> CustomException.of(AuthErrorCode.LOGIN_FAIL)
+        );
 
-        return userService.loginUser(email);
+        return MemberInfo.from(member);
     }
 }
