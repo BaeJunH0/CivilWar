@@ -1,6 +1,9 @@
 package toyProject.demo.team.presentation.dto;
 
-import java.util.Set;
+import toyProject.demo.player.presentation.dto.PlayerRequest;
 
-public record TeamRequest(String name, Set<Long> playerIds) {
+import java.util.List;
+
+
+public record TeamRequest(List<PlayerRequest> playerRequests, String name) {
 }
