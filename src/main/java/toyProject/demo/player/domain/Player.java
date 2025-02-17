@@ -4,27 +4,42 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import toyProject.demo.player.presentation.dto.PlayerRequest;
 
-@Table(name = "players")
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Player {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false)
-    private String riotId;
-    @Column(nullable = false)
-    private String riotTag;
 
-    private Player(String riotId, String riotTag){
-        this.riotId = riotId;
-        this.riotTag = riotTag;
+    @Column(nullable = false)
+    private String puuid;
+
+    @Column
+    private String nickname;
+
+    @Column
+    private String tag;
+
+    @Column
+    private String soloTier;
+
+    @Column
+    private String freeTier;
+
+    private Player(String puuid, String nickname, String tag){
+        this.puuid = puuid;
+        this.nickname = nickname;
+        this.tag = tag;
     }
 
-    public static Player of(String riotId, String riotTag){
-        return new Player(riotId, riotTag);
+    public static Player of(String puuid, String nickname, String tag) {
+        return new Player(puuid, nickname, tag);
+    }
+
+    public void addTierInfo(String soloTier, String freeTier) {
+        this.soloTier = soloTier;
+        this.freeTier = freeTier;
     }
 }

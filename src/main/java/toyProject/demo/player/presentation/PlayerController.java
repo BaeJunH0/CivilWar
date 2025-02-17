@@ -3,14 +3,16 @@ package toyProject.demo.player.presentation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import toyProject.demo.player.application.PlayerService;
 import toyProject.demo.player.application.dto.PlayerCommand;
 import toyProject.demo.player.presentation.dto.PlayerRequest;
-import toyProject.demo.player.presentation.dto.PlayerResponse;
-import toyProject.demo.player.application.PlayerService;
+import toyProject.demo.riot.dto.LeagueEntryDTO;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -18,28 +20,13 @@ import java.util.stream.Collectors;
 public class PlayerController {
     private final PlayerService playerService;
 
-    // 관리자용
-    @GetMapping
-    public ResponseEntity<List<PlayerResponse>> readPlayers(){
-        List<PlayerResponse> players = playerService.findAll().stream().map(PlayerResponse::from).collect(Collectors.toList());
-        return new ResponseEntity<>(players, HttpStatus.OK);
-    }
+    // 플레이어 검색
+    @GetMapping()
+    public ResponseEntity<List<LeagueEntryDTO>> playerSearch(
+            @RequestBody PlayerRequest playerRequest
+    ) {
+        List<LeagueEntryDTO> leagueEntryDTOS = playerService.searchPlayer(PlayerCommand.to(playerRequest));
 
-    @GetMapping("/{id}")
-    public ResponseEntity<PlayerResponse> readPlayer(@PathVariable("id") Long id){
-        PlayerResponse player = PlayerResponse.from(playerService.findById(id));
-        return new ResponseEntity<>(player, HttpStatus.OK);
-    }
-
-    @PostMapping
-    public ResponseEntity<Void> createPlayer(@RequestBody PlayerRequest playerRequest){
-        playerService.save(PlayerCommand.from(playerRequest));
-        return new ResponseEntity<>(HttpStatus.CREATED);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePlayer(@PathVariable Long id){
-        playerService.delete(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(leagueEntryDTOS, HttpStatus.OK);
     }
 }
