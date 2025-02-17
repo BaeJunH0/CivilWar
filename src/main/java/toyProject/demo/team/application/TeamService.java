@@ -1,58 +1,86 @@
 package toyProject.demo.team.application;
 
-import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import toyProject.demo.team.presentation.dto.TeamRequest;
-import toyProject.demo.team.presentation.dto.TeamResponse;
-import toyProject.demo.player.domain.Player;
+import org.springframework.transaction.annotation.Transactional;
+import toyProject.demo.exception.CustomException;
+import toyProject.demo.exception.errorCode.TeamErrorCode;
+import toyProject.demo.player.application.dto.PlayerInfo;
+import toyProject.demo.team.application.dto.TeamInfo;
+import toyProject.demo.player.domain.TeamPlayer;
+import toyProject.demo.player.persistent.TeamPlayerRepository;
 import toyProject.demo.team.domain.Team;
-import toyProject.demo.player.persistence.PlayerRepository;
 import toyProject.demo.team.persistence.TeamRepository;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Service
+@RequiredArgsConstructor
 public class TeamService {
     private final TeamRepository teamRepository;
-    private final PlayerRepository playerRepository;
+    private final TeamPlayerRepository teamPlayerRepository;
 
-    public TeamService(TeamRepository teamRepository, PlayerRepository playerRepository) {
-        this.teamRepository = teamRepository;
-        this.playerRepository = playerRepository;
+    @Transactional(readOnly = true)
+    public List<TeamInfo.Basic> findAll() {
+        return teamRepository.findAll().stream().map(TeamInfo.Basic::of).toList();
     }
 
-    public List<TeamResponse> findAll(){
-        List<TeamResponse> answer = new ArrayList<>();
-        List<Team> teams = teamRepository.findAll();
-        for (Team team : teams) {
-            answer.add(new TeamResponse(team));
+    @Transactional(readOnly = true)
+    public List<TeamInfo.Basic> findMyTeams(String owner) {
+        return teamRepository.findTeamsByOwner(owner).stream().map(TeamInfo.Basic::of).toList();
+    }
+
+    @Transactional(readOnly = true)
+    public TeamInfo.Detail findOneTeam(Long id) {
+        Team team = teamRepository.findById(id).orElseThrow(
+                () -> CustomException.of(TeamErrorCode.NOT_FOUND)
+        );
+
+        List<TeamPlayer> teamPlayers = teamPlayerRepository.findTeamPlayerByTeam(team);
+        List<PlayerInfo> playerInfos = teamPlayers.stream()
+                .map(TeamPlayer::getPlayer)
+                .map(PlayerInfo::of)
+                .toList();
+
+        return TeamInfo.Detail.of(playerInfos);
+    }
+
+    @Transactional
+    public Team save(String name, String owner) {
+        return teamRepository.save(Team.of(name, owner));
+    }
+
+    @Transactional(readOnly = true)
+    public Team findByOwnerAndId(String owner, Long id) {
+        Team team = teamRepository.findById(id).orElseThrow(
+                () -> CustomException.of(TeamErrorCode.NOT_FOUND)
+        );
+
+        if(!team.getOwner().equals(owner)) {
+            throw CustomException.of(TeamErrorCode.NOT_MY_TEAM);
         }
-        return answer;
+
+        return team;
     }
 
-    public TeamResponse findOne(Long id){
-        Team team = teamRepository.findById(id).orElseThrow(NoSuchFieldError::new);
-        return new TeamResponse(team);
-    }
     @Transactional
-    public void save(TeamRequest teamRequest){
-        teamRepository.save(new Team(teamRequest.getName()));
-    }
-    @Transactional
-    public void update(Long id, TeamRequest teamRequest){
-        Team team = teamRepository.findById(id).orElseThrow(NoSuchFieldError::new);
-        team.changeName(teamRequest.getName());
+    public void cleanTeam(Team team) {
+        List<TeamPlayer> teamPlayers = teamPlayerRepository.findTeamPlayerByTeam(team);
 
-        Set<Long> playerIds = teamRequest.getPlayerIds();
-        for (Long playerId : playerIds) {
-            Player player = playerRepository.findById(playerId).orElseThrow(NoSuchFieldError::new);
-            team.addPlayer(player);
+        teamPlayerRepository.deleteAll(teamPlayers);
+    }
+
+    @Transactional
+    public void teamDelete(String owner, Long id){
+        Team team = teamRepository.findById(id).orElseThrow(
+                () -> CustomException.of(TeamErrorCode.NOT_FOUND)
+        );
+
+        if(!team.getOwner().equals(owner)) {
+            throw CustomException.of(TeamErrorCode.NOT_MY_TEAM);
         }
-    }
-    @Transactional
-    public void delete(Long id){
+
+        cleanTeam(team);
         teamRepository.deleteById(id);
     }
 }
