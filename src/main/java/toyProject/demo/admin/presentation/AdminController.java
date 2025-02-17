@@ -48,7 +48,6 @@ public class AdminController {
     public ResponseEntity<List<TeamResponse.Basic>> readTeams(
             @AuthenticateMember MemberInfo memberInfo
     ) {
-        // 어드민 검증
         if(!memberInfo.admin()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
