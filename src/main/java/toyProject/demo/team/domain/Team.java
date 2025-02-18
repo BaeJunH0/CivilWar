@@ -4,9 +4,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import toyProject.demo.member.domain.Member;
 
-@Table(name="teams")
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter

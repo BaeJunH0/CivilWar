@@ -1,6 +1,8 @@
 package toyProject.demo.member.application;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import toyProject.demo.exception.CustomException;
@@ -57,10 +59,8 @@ public class MemberService {
 
     // 관리자용 RD
     @Transactional(readOnly = true)
-    public List<MemberInfo> findAll(){
-        return memberRepository.findAll().stream()
-                .map(MemberInfo::from)
-                .toList();
+    public Page<MemberInfo> findAll(Pageable pageable){
+        return memberRepository.findAll(pageable).map(MemberInfo::from);
     }
 
     @Transactional
