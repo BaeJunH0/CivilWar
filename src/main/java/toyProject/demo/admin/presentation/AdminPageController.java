@@ -9,4 +9,14 @@ public class AdminPageController {
     public String adminLogin() {
         return "adminLogin.html";
     }
+
+    @GetMapping("/adminMember")
+    public String adminMember() {
+        return "adminMember.html";
+    }
+
+    @GetMapping("/adminTeam")
+    public String adminTeam() {
+        return "adminTeam.html";
+    }
 }
