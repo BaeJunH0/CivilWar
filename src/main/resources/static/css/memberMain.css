@@ -11,6 +11,43 @@ body {
     min-height: 100vh; /* 최소 높이 설정 */
 }
 
+.header {
+    width: 100%;
+    height: 60px;
+    background-color: #3cb371; /* Medium sea green */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    position: relative;
+}
+
+.tabs {
+    display: flex;
+    gap: 20px; /* 각 탭 사이 간격 */
+    position: absolute;
+    right: 40px; /* 오른쪽 끝에서 40px 띄우기 */
+    top: 50%;
+    transform: translateY(-50%); /* 수직 가운데 정렬 */
+    padding: 5px 10px; /* 적당한 내부 여백 추가 */
+}
+
+
+.tab {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+.tab:hover {
+    color: #2e8b57; /* Dark green */
+}
+
 .container {
     display: flex;
     flex-direction: column;
