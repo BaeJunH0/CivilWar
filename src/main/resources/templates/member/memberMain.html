@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>메인 페이지</title>
+    <link rel="shortcut icon" href="">
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+    <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">
+    <link rel="stylesheet" href="/css/memberMain.css">
+    <script src="/js/memberMain.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <img src="https://static.wixstatic.com/media/2d5b26_0490ffe3b36a4ac0baf450e1a89bb3d6~mv2.png/v1/fill/w_1000,h_523,al_c,q_90,usm_0.66_1.00_0.01/2d5b26_0490ffe3b36a4ac0baf450e1a89bb3d6~mv2.png" alt="로고" class="logo">
+
+    <div class="team-section">
+        <div class="team-label">팀 1</div>
+        <div class="entity">
+            <div class="box" data-player-id="1">플레이어 1</div>
+            <div class="box" data-player-id="2">플레이어 2</div>
+            <div class="box" data-player-id="3">플레이어 3</div>
+            <div class="box" data-player-id="4">플레이어 4</div>
+            <div class="box" data-player-id="5">플레이어 5</div>
+        </div>
+    </div>
+
+    <div class="team-section">
+        <div class="team-label">팀 2</div>
+        <div class="entity">
+            <div class="box" data-player-id="6">플레이어 6</div>
+            <div class="box" data-player-id="7">플레이어 7</div>
+            <div class="box" data-player-id="8">플레이어 8</div>
+            <div class="box" data-player-id="9">플레이어 9</div>
+            <div class="box" data-player-id="10">플레이어 10</div>
+        </div>
+    </div>
+
+    <div class="buttons">
+        <div class="button">팀 셔플</div>
+        <div class="button">팀 저장</div>
+    </div>
+</div>
+
+<!-- 모달 HTML 구조 -->
+<div class="modal" id="modal">
+    <div class="modal-content">
+        <p>모달 내용</p>
+        <input type="text" id="inputField1" class="input-field" placeholder="첫 번째 입력">
+        <input type="text" id="inputField2" class="input-field" placeholder="두 번째 입력">
+        <button class="submit-btn">제출</button>
+        <button class="close-btn">닫기</button>
+    </div>
+</div>
+
+</body>
+</html>
