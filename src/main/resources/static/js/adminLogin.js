@@ -35,5 +35,5 @@ $(document).ready(function() {
 function successLogin(value) {
     localStorage.clear();
     localStorage.setItem('token', value);
-    window.location.href = "/adminMember";
+    window.location.href = "/admin/member";
 }

@@ -1,4 +1,24 @@
 /* styles.css */
+
+.button-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* 버튼 사이 간격 */
+    align-items: center; /* 버튼 정렬 */
+}
+
+.button-container input[type="button"] {
+    width: 100%;
+    padding: 10px;
+    background-color: #3cb371; /* Medium sea green */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f9; /* 연한 회색 */

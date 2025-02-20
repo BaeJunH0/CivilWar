@@ -3,7 +3,7 @@ var pageSize = 10;
 
 $(document).ready(function() {
     if(localStorage.getItem('token') === null) {
-        window.location.href = '/adminLogin';
+        window.location.href = '/admin/login';
     }
     getTeams(currentPage);
 
@@ -51,7 +51,7 @@ function getTeams(page){
         error: function(err) {
             alert("권한이 없습니다!");
             localStorage.clear();
-            window.location.href = '/adminLogin';
+            window.location.href = '/admin/login';
         }
     });
 }

@@ -3,7 +3,7 @@ var pageSize = 10;
 
 $(document).ready(function() {
     if(localStorage.getItem('token') === null) {
-        window.location.href = '/adminLogin';
+        window.location.href = '/admin/login';
     }
     getMembers(currentPage);
 
@@ -55,7 +55,7 @@ function getMembers(page){
         error: function(err) {
             alert("권한이 없습니다!");
             localStorage.clear();
-            window.location.href = '/adminLogin';
+            window.location.href = '/admin/login';
         }
     });
 }
@@ -74,7 +74,7 @@ function deleteMemberFunction(id){
         },
         error : function(error){
             alert("권한이 없습니다");
-            window.location.href = '/adminLogin';
+            window.location.href = '/admin/login';
         }
     })
 }
