@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="KR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>팀 관리 페이지</title>
+    <link rel="stylesheet" href="/css/adminTeam.css">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/js/adminTeam.js"></script>
+</head>
+<body>
+<div class="header" id="header">
+    <div class="tabs">
+        <a href="/admin/login" class="tab">Logout</a>
+        <a href="/admin/member" class="tab">Member</a>
+        <a href="/admin/team" class="tab">Team</a>
+    </div>
+</div>
+<h1>Team Manage Page</h1>
+
+<table id="team-table">
+    <thead>
+    <tr>
+        <th scope="col">Id</th>
+        <th scope="col">Name</th>
+        <th scope="col">Owner</th>
+    </tr>
+    </thead>
+    <tbody id="team-tbody">
+    <!-- AJAX를 통해 데이터를 로드 -->
+    </tbody>
+</table>
+<div>
+    <button id="prevPage">Prev</button>
+    <button id="search" onclick="getMembers(currentPage)">조회</button>
+    <button id="nextPage">Next</button>
+</div>
+</body>
+</html>

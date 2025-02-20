@@ -1,6 +1,8 @@
 package toyProject.demo.team.application;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import toyProject.demo.exception.CustomException;
@@ -21,8 +23,8 @@ public class TeamService {
     private final TeamPlayerRepository teamPlayerRepository;
 
     @Transactional(readOnly = true)
-    public List<TeamInfo.Basic> findAll() {
-        return teamRepository.findAll().stream().map(TeamInfo.Basic::of).toList();
+    public Page<TeamInfo.Basic> findAll(Pageable pageable) {
+        return teamRepository.findAll(pageable).map(TeamInfo.Basic::of);
     }
 
     @Transactional(readOnly = true)
