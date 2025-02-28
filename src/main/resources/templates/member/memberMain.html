@@ -14,12 +14,14 @@
 <body>
 <div class="header" id="header">
     <div class="tabs">
-        <a href="#" id="authLink" class="tab">Logout</a>
+        <a href="#" id="authLink" class="tab">로그아웃</a>
     </div>
 </div>
 
 <div class="container">
-    <img src="https://static.wixstatic.com/media/2d5b26_0490ffe3b36a4ac0baf450e1a89bb3d6~mv2.png/v1/fill/w_1000,h_523,al_c,q_90,usm_0.66_1.00_0.01/2d5b26_0490ffe3b36a4ac0baf450e1a89bb3d6~mv2.png" alt="로고" class="logo">
+    <div class="current-team-info" id="currentTeamInfo">
+        <span id="teamName">현재 팀 : </span>
+    </div>
 
     <div class="team-section">
         <div class="team-label">팀 1</div>
@@ -44,19 +46,41 @@
     </div>
 
     <div class="buttons">
-        <div class="button" id="shuffleBtn">팀 셔플</div>
+        <div class="button" id="shuffleBtn">랜덤 셔플</div>
+        <div class="button" id="tierShuffleBtn">티어 셔플</div>
         <div class="button" id="saveBtn">팀 저장</div>
+        <div class="button" id="viewTeamsBtn">팀 조회</div>
     </div>
 </div>
 
-<!-- 모달 HTML 구조 -->
+<!-- 첫 번째 모달 (플레이어 검색 모달) -->
 <div class="modal" id="modal">
     <div class="modal-content">
         <p>모달 내용</p>
         <input type="text" id="inputField1" class="input-field" placeholder="첫 번째 입력">
         <input type="text" id="inputField2" class="input-field" placeholder="두 번째 입력">
-        <button class="submit-btn">제출</button>
+        <button class="submit-btn">등록</button>
+        <button class="init-btn">초기화</button>
         <button class="close-btn">닫기</button>
+    </div>
+</div>
+
+<!-- 두 번째 모달 (팀 이름 입력 모달) -->
+<div class="modal" id="teamModal">
+    <div class="modal-content">
+        <p>팀 이름을 입력하세요</p>
+        <input type="text" id="teamNameField" class="input-field" placeholder="팀 이름">
+        <button class="submit-team-btn" id="submitTeamName">제출</button>
+        <button class="close-team-btn" id="closeTeamModal">닫기</button>
+    </div>
+</div>
+
+<!-- 팀 조회 모달 -->
+<div class="modal" id="teamListModal">
+    <div class="modal-content">
+        <p>내 팀 목록</p>
+        <div id="teamListContainer" class="team-list"></div>
+        <button class="close-team-btn" id="closeTeamListModal">닫기</button>
     </div>
 </div>
 

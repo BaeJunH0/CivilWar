@@ -47,24 +47,13 @@ public class TeamController {
 
     // 팀 생성
     @PostMapping("")
-    public ResponseEntity<Void> createTeam(
+    public ResponseEntity<Long> createTeam(
             @AuthenticateMember MemberInfo memberInfo,
             @RequestBody TeamRequest teamRequest
     ) {
-        teamFacade.saveTeamPlayer(teamRequest, memberInfo.nickname());
+        Long teamId = teamFacade.saveTeamPlayer(teamRequest, memberInfo.nickname());
 
-        return new ResponseEntity<>(HttpStatus.CREATED);
-    }
-
-    // 팀 수정
-    @PatchMapping("/{id}")
-    public ResponseEntity<Void> updateTeam(
-            @AuthenticateMember MemberInfo memberInfo,
-            @PathVariable Long id,
-            @RequestBody TeamRequest teamRequest
-    ){
-        teamFacade.updateTeamPlayer(teamRequest, memberInfo.nickname(), id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(teamId, HttpStatus.CREATED);
     }
 
     // 팀 삭제
@@ -82,8 +71,7 @@ public class TeamController {
     public ResponseEntity<TeamResponse.Detail> shuffleTeam(
             @PathVariable Long id
     ) {
-        // Todo : 알고리즘 구현해서 추가하기 ( 팀 섞기 )
-        TeamResponse.Detail team = TeamResponse.Detail.of(teamService.findOneTeam(id));
+        TeamResponse.Detail team = TeamResponse.Detail.of(teamFacade.shufflePlayer(id));
 
         return new ResponseEntity<>(team, HttpStatus.OK);
     }

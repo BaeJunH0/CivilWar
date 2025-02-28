@@ -27,4 +27,3 @@ VALUES
     (DEFAULT, 'Team9', 'admin'),
     (DEFAULT, 'Team10', 'admin'),
     (DEFAULT, 'Team11', 'admin');
-

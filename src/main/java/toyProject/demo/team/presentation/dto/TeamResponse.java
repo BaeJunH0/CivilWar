@@ -16,10 +16,11 @@ public class TeamResponse {
         }
     }
 
-    public record Detail(List<PlayerResponse> playerResponses) {
+    public record Detail(List<PlayerResponse> playerResponses, String name) {
         public static TeamResponse.Detail of(TeamInfo.Detail teamInfo) {
             return new TeamResponse.Detail(
-                    teamInfo.playerInfos().stream().map(PlayerResponse::of).toList()
+                    teamInfo.playerInfos().stream().map(PlayerResponse::of).toList(),
+                    teamInfo.name()
             );
         }
     }

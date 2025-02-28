@@ -6,7 +6,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import toyProject.demo.player.application.PlayerService;
 import toyProject.demo.player.application.dto.PlayerCommand;
+import toyProject.demo.player.application.dto.PlayerInfo;
 import toyProject.demo.player.presentation.dto.PlayerRequest;
+import toyProject.demo.player.presentation.dto.PlayerResponse;
 import toyProject.demo.riot.dto.LeagueEntryDTO;
 
 import java.util.List;
@@ -19,11 +21,11 @@ public class PlayerController {
 
     // 플레이어 검색
     @PostMapping()
-    public ResponseEntity<List<LeagueEntryDTO>> playerSearch(
-            @RequestBody PlayerRequest playerRequest
+    public ResponseEntity<PlayerResponse> playerSearch(
+            @RequestBody PlayerRequest.Search playerRequest
     ) {
-        List<LeagueEntryDTO> leagueEntryDTOS = playerService.searchPlayer(PlayerCommand.to(playerRequest));
+        PlayerInfo playerInfo = playerService.searchPlayer(PlayerCommand.to(playerRequest));
 
-        return new ResponseEntity<>(leagueEntryDTOS, HttpStatus.OK);
+        return new ResponseEntity<>(PlayerResponse.of(playerInfo), HttpStatus.OK);
     }
 }

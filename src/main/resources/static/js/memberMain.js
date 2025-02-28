@@ -1,6 +1,21 @@
 document.addEventListener("DOMContentLoaded", function () {
     let selectedBox = null;
+    let currentTeamId = null;
+    let currentTeamName = null;
 
+    // 팀 정보를 업데이트하는 함수
+    function updateCurrentTeamInfo() {
+        const teamNameElement = document.getElementById('teamName');
+
+        if(currentTeamName == null) {
+            teamNameElement.textContent = `현재 팀 : 지정되지 않음`;
+        }
+        else {
+            teamNameElement.textContent = `현재 팀 : ` + currentTeamName;
+        }
+    }
+
+    // 플레이어 검색 동작
     document.querySelectorAll(".box").forEach(box => {
         box.addEventListener("click", function () {
             selectedBox = this; // 클릭한 박스를 저장
@@ -20,6 +35,12 @@ document.addEventListener("DOMContentLoaded", function () {
             alert("두 입력값을 모두 입력해주세요.");
         }
     });
+
+    document.querySelector(".init-btn").addEventListener("click", function () {
+        const id = selectedBox.getAttribute('data-player-id');
+        selectedBox.innerHTML = `플레이어 ${id}`;
+        closeModal();
+    })
 
     function openModal() {
         document.getElementById("modal").style.display = "flex";
@@ -43,25 +64,12 @@ document.addEventListener("DOMContentLoaded", function () {
             data: JSON.stringify(player),
             success: function (res) {
                 if (selectedBox) {
-                    var freeTier = '';
-                    var freeRank = '';
-                    var soloTier = '';
-                    var soloRank = '';
+                    var freeRank = res.freeRank;
+                    var soloRank = res.soloRank;
 
-                    for (const object of res) {
-                        if(object.queueType === "RANKED_SOLO_5x5") {
-                            soloTier = object.tier;
-                            soloRank = object.rank;
-                        }
-                        if(object.queueType === "RANKED_FLEX_SR") {
-                            freeTier = object.tier;
-                            freeRank = object.rank;
-                        }
-                    }
-
-                    selectedBox.innerHTML = nickname + '#' + tag + '<br>' +
-                        'SR : ' + soloTier + ' ' + soloRank + '<br>' +
-                        'FR : ' + freeTier + ' ' + freeRank;
+                    selectedBox.innerHTML = res.nickname + '#' + res.tag + '<br>' +
+                        'SR : '  + soloRank + '<br>' +
+                        'FR : '  + freeRank;
                 }
                 closeModal();
             },
@@ -71,9 +79,233 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    document.getElementById("shuffleBtn").addEventListener("click", shuffleTeams);
+    // 팀 저장 동작
 
-    document.getElementById("saveBtn").addEventListener("click", saveTeams);
+    document.getElementById("saveBtn").addEventListener("click", openTeamModal);
+
+    document.querySelector(".close-team-btn").addEventListener("click", closeTeamModal);
+
+    document.querySelector(".submit-team-btn").addEventListener("click", function () {
+        const teamNameValue = document.getElementById("teamNameField").value;
+
+        if (teamNameValue) {
+            saveTeams(teamNameValue);
+        } else {
+            alert("입력값을 입력해주세요.");
+        }
+    });
+
+    function openTeamModal() {
+        document.getElementById("teamModal").style.display = "flex";
+    }
+
+    function closeTeamModal() {
+        document.getElementById("teamModal").style.display = "none";
+    }
+
+    function saveTeams(teamName) {
+        const playerRequests = [];
+
+        document.querySelectorAll(".box").forEach(box => {
+            // "플레이어 n"이 아닌 경우에만 처리
+            if (!box.innerHTML.startsWith("플레이어")) {
+                const playerData = box.innerHTML.split('<br>'); // 줄바꿈을 기준으로 나누기
+                const nicknameTag = playerData[0].split('#'); // 닉네임과 태그 분리
+                const soloRankData = playerData[1].split(':')[1].trim(); // Solo Rank 추출
+                const freeRankData = playerData[2].split(':')[1].trim(); // Free Rank 추출
+
+                // player 객체로 만들기
+                const playerRequest = {
+                    nickname: nicknameTag[0],
+                    tag: nicknameTag[1],
+                    soloRank: soloRankData,
+                    freeRank: freeRankData
+                };
+                playerRequests.push(playerRequest); // players 배열에 추가
+            }
+            else {
+                // player 객체로 만들기
+                const playerRequest = {
+                    nickname: " ",
+                    tag: " ",
+                    soloRank: " ",
+                    freeRank: " "
+                };
+                playerRequests.push(playerRequest); // players 배열에 추가
+            }
+        });
+
+        const teamRequest = {
+            playerRequests : playerRequests,
+            name : teamName
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/api/teams",
+            headers : {
+                Authorization: 'Bearer ' + localStorage.getItem("token"),
+            },
+            contentType: "application/json",
+            data: JSON.stringify(teamRequest),
+            dataType : 'json',
+            success: function(response) {
+                alert("팀이 저장되었습니다!");
+
+                currentTeamId = response;
+                currentTeamName = teamName;
+                updateCurrentTeamInfo();
+
+                closeTeamModal();
+            },
+            error: function(res) {
+                alert("저장 실패!");
+            }
+        });
+    }
+
+
+    // 상단 바 로직
+    const authLink = document.getElementById("authLink");
+
+    if (localStorage.getItem("token") !== null) {
+        authLink.textContent = "Logout";
+        authLink.href = "/member/main";
+        authLink.addEventListener("click", function () {
+            localStorage.removeItem("token"); // 로그아웃 처리
+        });
+    } else {
+        authLink.textContent = "Login";
+        authLink.href = "/member/login";
+    }
+
+    // 팀 조회 동작
+    document.getElementById("viewTeamsBtn").addEventListener("click", getMyTeamList);
+    document.getElementById("closeTeamListModal").addEventListener("click", closeTeamListModal);
+
+    function openTeamListModal() {
+        document.getElementById("teamListModal").style.display = "flex";
+    }
+
+    function closeTeamListModal() {
+        document.getElementById("teamListModal").style.display = "none";
+    }
+
+    function getMyTeamList() {
+        $.ajax({
+            type: "GET",
+            url: "/api/teams/my", // 저장할 API 엔드포인트
+            headers : {
+                Authorization: 'Bearer ' + localStorage.getItem("token"),
+            },
+            datatype: "json",
+            success: function(response) {
+                openTeamListModal();
+                renderTeamList(response);
+            },
+            error: function(res) {
+                alert("저장 실패!");
+            }
+        });
+    }
+
+    function renderTeamList(teams) {
+        const teamListContainer = document.getElementById("teamListContainer");
+        teamListContainer.innerHTML = "";
+
+        teams.forEach(team => {
+            const teamItem = document.createElement("div");
+            teamItem.classList.add("team-item");
+            teamItem.textContent = `${team.name} (Owner: ${team.owner}) `;
+            teamItem.dataset.teamId = team.id;
+
+            // 조회 버튼 만들기
+            const viewButton = document.createElement("button");
+            viewButton.textContent = "View";
+            viewButton.addEventListener("click", function (event) {
+                event.stopPropagation();  // 클릭 이벤트 버블링을 막아 teamItem의 클릭 이벤트가 실행되지 않도록
+                loadTeam(team.id);  // 조회
+                currentTeamId = team.id;
+            });
+
+            // 삭제 버튼 만들기
+            const deleteButton = document.createElement("button");
+            deleteButton.textContent = "Delete";
+            deleteButton.addEventListener("click", function (event) {
+                event.stopPropagation();  // 클릭 이벤트 버블링을 막아 teamItem의 클릭 이벤트가 실행되지 않도록
+                deleteTeam(team.id);  // 삭제
+            });
+
+            // 팀 아이템에 버튼 추가
+            teamItem.appendChild(viewButton);
+            teamItem.appendChild(deleteButton);
+
+            // 팀 아이템을 리스트에 추가
+            teamListContainer.appendChild(teamItem);
+        });
+    }
+
+    function loadTeam(id) {
+        $.ajax({
+            type: "GET",
+            url: `/api/teams/${id}`,
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem("token"),
+            },
+            success: function (teamData) {
+                alert("팀 정보를 불러왔습니다.");
+                updateMainScreen(teamData);
+
+                currentTeamName = teamData.name;
+                currentTeamId = id;
+                updateCurrentTeamInfo();
+
+                closeTeamListModal();
+            },
+            error: function () {
+                alert("팀 정보를 불러오는데 실패했습니다.");
+            }
+        });
+    }
+
+    function updateMainScreen(teamData) {
+        const players = teamData.playerResponses;
+        const boxes = document.querySelectorAll(".box");
+
+        boxes.forEach((box, index) => {
+            if (players[index] && !players[index].nickname.startsWith("defaultPlayer")) {
+                box.innerHTML = `${players[index].nickname}#${players[index].tag}<br>
+                                 SR: ${players[index].soloRank}<br>
+                                 FR: ${players[index].freeRank}`;
+            } else {
+                box.innerHTML = `플레이어 ${index + 1}`;
+            }
+        });
+    }
+
+    function deleteTeam(id) {
+        $.ajax({
+            type: "DELETE",
+            url: `/api/teams/${id}`,
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem("token"),
+            },
+            success: function () {
+                if (id === currentTeamId) {
+                    currentTeamId = null;
+                    currentTeamName = null;
+                    updateCurrentTeamInfo();
+                }
+                getMyTeamList();
+            },
+            error: function () {
+                alert("팀을 삭제하지 못했습니다.");
+            }
+        });
+    }
+
+    // 팀 랜덤 셔플 동작
+    document.getElementById("shuffleBtn").addEventListener("click", shuffleTeams);
 
     function shuffleTeams() {
         const teams = [];
@@ -97,45 +329,27 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    function saveTeams() {
-        const teams = [];
+    // 티어 셔플 동작
+    document.getElementById("tierShuffleBtn").addEventListener("click", tierShuffleTeams);
 
-        // "플레이어 n"을 제외하고 팀 저장
-        document.querySelectorAll(".box").forEach(box => {
-            if (!box.innerHTML.startsWith("플레이어")) {
-                teams.push(box.innerHTML);
-            }
-        });
+    function tierShuffleTeams() {
+        if(currentTeamId === null) {
+            alert("저장 또는 조회 이후에 사용할 수 있습니다!");
+            return
+        }
 
-        // 저장할 팀 데이터 처리 (예: API 요청)
         $.ajax({
             type: "POST",
-            url: "/api/save-teams", // 저장할 API 엔드포인트
-            contentType: "application/json",
-            dataType: "json",
-            data: JSON.stringify({ teams: teams }),
-            success: function(response) {
-                alert("팀이 저장되었습니다!");
+            url: `/api/teams/${currentTeamId}`,
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem("token"),
             },
-            error: function() {
-                alert("저장 실패!");
+            success: function (res) {
+                updateMainScreen(res);
+            },
+            error: function () {
+                alert("셔플에 실패했습니다!");
             }
         });
-    }
-
-});
-
-document.addEventListener("DOMContentLoaded", function () {
-    const authLink = document.getElementById("authLink");
-
-    if (localStorage.getItem("token") !== null) {
-        authLink.textContent = "Logout";
-        authLink.href = "/member/main";
-        authLink.addEventListener("click", function () {
-            localStorage.removeItem("token"); // 로그아웃 처리
-        });
-    } else {
-        authLink.textContent = "Login";
-        authLink.href = "/member/login";
     }
 });
