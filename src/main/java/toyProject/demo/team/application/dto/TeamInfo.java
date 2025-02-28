@@ -16,9 +16,9 @@ public class TeamInfo {
         }
     }
 
-    public record Detail(List<PlayerInfo> playerInfos) {
-        public static Detail of(List<PlayerInfo> playerInfos) {
-            return new Detail(playerInfos);
+    public record Detail(List<PlayerInfo> playerInfos, String name) {
+        public static Detail of(List<PlayerInfo> playerInfos, String name) {
+            return new Detail(playerInfos, name);
         }
     }
 }

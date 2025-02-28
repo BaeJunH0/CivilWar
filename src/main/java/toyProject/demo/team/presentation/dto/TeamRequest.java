@@ -5,5 +5,5 @@ import toyProject.demo.player.presentation.dto.PlayerRequest;
 import java.util.List;
 
 
-public record TeamRequest(List<PlayerRequest> playerRequests, String name) {
+public record TeamRequest(List<PlayerRequest.Save> playerRequests, String name) {
 }

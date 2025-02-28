@@ -1,32 +1,19 @@
-var currentPage = 0;
-var pageSize = 10;
-
 $(document).ready(function() {
     if(localStorage.getItem('token') === null) {
-        window.location.href = '/admin/login';
+        alert("로그인이 필요한 서비스입니다!");
+        window.location.href = '/member/login';
     }
-    getTeams(currentPage);
-
-    $('#prevPage').click(function() {
-        if (currentPage > 0) {
-            getTeams(currentPage - 1);
-        }
-    });
-
-    $('#nextPage').click(function() {
-        getTeams(currentPage + 1);
-    });
+    getTeams();
 });
 
-function getTeams(page){
+function getTeams(){
     $.ajax({
-        url: '/api/admin/teams' + '?page=' + page + '&size=' + pageSize,
+        url: '/api/teams/my',
         method: 'GET',
         headers : {
             Authorization: 'Bearer ' + localStorage.getItem("token"),
         },
-        success: function(data) {
-            var contents = data.content;
+        success: function(contents) {
             var tbody = $('#team-tbody');
             tbody.empty(); // 초기화
 
@@ -37,7 +24,9 @@ function getTeams(page){
                         <tr>
                             <td>${team.id}</td>
                             <td>${team.name}</td>
-                            <td>${team.owner}</td>
+                            <td>
+                                <a href="#" onclick="getDetail(${team.id})">상세보기</a>
+                            </td>
                         </tr>
                     `;
                 tbody.append(row);
@@ -54,4 +43,8 @@ function getTeams(page){
             window.location.href = '/admin/login';
         }
     });
+
+    function getDetail(id) {
+
+    }
 }

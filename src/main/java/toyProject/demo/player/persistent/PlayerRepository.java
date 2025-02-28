@@ -6,5 +6,5 @@ import toyProject.demo.player.domain.Player;
 import java.util.Optional;
 
 public interface PlayerRepository extends JpaRepository<Player, Long> {
-    Optional<Player> findByPuuid(String puuid);
+    Optional<Player> findPlayerByNicknameAndTag(String nickname, String tag);
 }

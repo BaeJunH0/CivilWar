@@ -14,6 +14,9 @@ public class TeamPlayer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "index")
+    private int index;
+
     @ManyToOne
     @JoinColumn(name = "team_id")
     private Team team;
@@ -22,12 +25,13 @@ public class TeamPlayer {
     @JoinColumn(name = "player_id")
     private Player player;
 
-    private TeamPlayer(Team team, Player player) {
+    private TeamPlayer(Team team, Player player, int index) {
         this.team = team;
         this.player = player;
+        this.index = index;
     }
 
-    public static TeamPlayer of(Team team, Player player) {
-        return new TeamPlayer(team, player);
+    public static TeamPlayer of(Team team, Player player, int index) {
+        return new TeamPlayer(team, player, index);
     }
 }
