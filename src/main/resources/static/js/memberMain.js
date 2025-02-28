@@ -378,8 +378,9 @@ function checkTokenOnPageLoad() {
     const token = localStorage.getItem("token"); // 또는 sessionStorage
 
     if (isTokenExpired(token)) {
-        alert("로그인이 만료되었습니다.");
-        localStorage.removeItem("jwtToken"); // 토큰 삭제
+        alert("로그인이 만료되었습니다. 다시 로그인해 주세요.");
+        localStorage.removeItem("token"); // 토큰 삭제
+        window.location.href = "/member/login"; // 로그인 페이지로 리디렉트
     }
 }
 
