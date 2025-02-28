@@ -3,6 +3,8 @@ document.addEventListener("DOMContentLoaded", function () {
     let currentTeamId = null;
     let currentTeamName = null;
 
+
+
     // 팀 정보를 업데이트하는 함수
     function updateCurrentTeamInfo() {
         const teamNameElement = document.getElementById('teamName');
@@ -164,7 +166,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 closeTeamModal();
             },
             error: function(res) {
-                alert("저장 실패!");
+                alert("이미 존재하는 팀 이름입니다!");
             }
         });
     }
@@ -358,3 +360,28 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 });
+
+function isTokenExpired(token) {
+    if (!token) return true;
+
+    try {
+        const payload = JSON.parse(atob(token.split(".")[1]));
+        const now = Math.floor(Date.now() / 1000); // 현재 시간(초 단위)
+
+        return payload.exp < now; // 만료 시간(exp)이 현재 시간보다 과거면 true
+    } catch (e) {
+        return true; // 파싱 실패 시 만료된 것으로 처리
+    }
+}
+
+function checkTokenOnPageLoad() {
+    const token = localStorage.getItem("token"); // 또는 sessionStorage
+
+    if (isTokenExpired(token)) {
+        alert("로그인이 만료되었습니다.");
+        localStorage.removeItem("jwtToken"); // 토큰 삭제
+    }
+}
+
+// 페이지 로드 시 JWT 확인
+document.addEventListener("DOMContentLoaded", checkTokenOnPageLoad);
