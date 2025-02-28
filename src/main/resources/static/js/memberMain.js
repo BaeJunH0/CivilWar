@@ -56,6 +56,8 @@ document.addEventListener("DOMContentLoaded", function () {
             tag: tag
         };
 
+        $("#loading-overlay").show();
+
         $.ajax({
             type: "POST",
             url: "/api/players",
@@ -75,7 +77,10 @@ document.addEventListener("DOMContentLoaded", function () {
             },
             error: function () {
                 alert("검색 실패!");
-            }
+            },
+        }).always(function () {
+            // 요청이 끝나면 로딩 숨김 (성공/실패와 관계없이 실행됨)
+            $("#loading-overlay").hide();
         });
     }
 
